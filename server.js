@@ -21,16 +21,26 @@ const db = mysql.createConnection(
     console.log('Connected to the election database.')
 );
 
-
-app.get('/', (req, res) => {
+app.get('/api/candidates', (req, res) => {
+    
+  const sql = `SELECT * FROM candidates`;
+  
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({error: err.message});
+      return;
+    }
     res.json({
-      message: 'Hello World'
+      message: 'success',
+      data: rows
     });
+  });
 });
+
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
-    res.status(404).end();
+  res.status(404).end();
 });
 
 app.listen(PORT, () => {
